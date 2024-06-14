@@ -1,6 +1,7 @@
 from typing import Callable
 import pandas as pd
 import datetime as dt
+import re
 
 
 class SGUReport():
@@ -55,12 +56,14 @@ class SGUReport():
             else:
                 categ = default_tag
 
+            description, card_key = self._extract_card_key(entry['description'])
+
             key = (
                 dt.datetime.fromisoformat(entry['start']).strftime("%d/%m/%Y"),
                 entry['project'],
                 categ,
-                entry['description'][:self._max_num_chars],
-                '',
+                description[:self._max_num_chars],
+                card_key,
                 username
             )
 
@@ -80,6 +83,19 @@ class SGUReport():
             }
             for key, value in processed_data.items()
         ] 
+
+    def _extract_card_key(self, card_name: str) -> tuple[str, str]:
+        card_pattern = r"#\w+-\d+"
+
+        match = re.search(card_pattern, card_name)
+        card_key = ""
+
+        if match:
+            card_key = match.group()[1:]
+            card_name = card_name.replace(match.group(), "").strip()
+
+        return card_name, card_key
+            
 
 def register(register_function: Callable, name: str) -> None:
     """ Register plugin """

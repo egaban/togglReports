@@ -58,6 +58,9 @@ The `--end` tag is optional. If not specified, today's date will be used.
 
 While configuring the report, you can define a specific tag to indicate that a time entry should be ignored while creating a report. 
 
+Optionally, card keys are also supported. You can specify in the task name, as example "My task #UNI-1234" will extract the card key as "UNI-1234" 
+and create an entry with description "My task".
+
 ## FAQ
 
 ### 1. How to locate the Toggl API Token?
